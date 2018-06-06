@@ -3,7 +3,7 @@ from decouple import config
 import pymysql.cursors
 import tweepy
 import json, time, datetime
-from DC import DC_FAQ, DC_Curso
+from BL import BL_Curso, BL_FAQ
 
 # Twitter authentication
 auth = tweepy.OAuthHandler(config('API_KEY'), config('API_SECRET'))
@@ -48,20 +48,31 @@ class StreamListener(tweepy.StreamListener):
                 break
         if flag == 0:
             name = tweet["text"][tweet['text'].find(':') + 1:len(tweet['text']) + 1]
+            print(st, "[User]: ", user)
             for hash_tag in hash_tags:
                 if hash_tag["text"].upper() == "INFORMACION":
-                    resp = DC_Curso.getCursoDescription(connection, name)
-                    print(st, "[Response]: ", resp["descripcion"])
+                    resp = BL_Curso.getCursoDescripcion(connection,name)
+                    print(resp)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["descripcion"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ",name)
                 if hash_tag["text"].upper() == "PREREQUISITOS":
-                    resp = DC_Curso.getCursoPreRequisitos(connection, name)
-                    print(st, "[Response]: ", resp["pre_requisito"])
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
         else:
             print(st, "[User]: ", user)
             question = tweet["text"][tweet['text'].find('¿'):tweet['text'].find('?') + 1]
             print(st, "[Question]: ", question)
-            resp = DC_FAQ.getRespuesta(connection, question)
-            updateStatus(user, resp)
-            print(st, "[Response]: ", resp)
+            resp = BL_FAQ.getRespuesta(connection, question)
+            if resp != 0:
+                updateStatus(user, resp)
+                print(st, "[Response]: ", resp)
+            else:
+                print(st, "[DEBUG]: ", "No se ha encontrado ", question)
 
         return True
 

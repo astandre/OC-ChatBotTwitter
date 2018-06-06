@@ -16,24 +16,29 @@ def getAllCursos(cn):
         print("error", Exception)
 
 
-def getCursoDescription(cn, name):
+def getCursoDescription(cn, id_curso):
     try:
         with cn.cursor() as cursor:
             # Read a single record
-            sql = "SELECT descripcion FROM curso WHERE descripcion LIKE '%" + name + "%'"
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            return result
+            sql = "SELECT descripcion FROM curso WHERE id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchone()
+                return result
+            else:
+                return 0
     except Exception:
         print("error", Exception)
 
-def getCursoPreRequisitos(cn, name):
+
+def getCursoPreRequisitos(cn, id_curso):
     try:
         with cn.cursor() as cursor:
             # Read a single record
-            sql = "SELECT pre_requisito FROM curso WHERE descripcion LIKE '%" + name + "%'"
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            return result
+            sql = "SELECT pre_requisito FROM curso WHERE id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchone()
+                return result
+            else:
+                return 0
     except Exception:
         print("error", Exception)
