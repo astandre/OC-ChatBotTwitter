@@ -57,7 +57,7 @@ class StreamListener(tweepy.StreamListener):
                         print(st, "[Response]: ", resp["descripcion"])
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", name)
-                if hash_tag["text"].upper() == "PREREQUISITOS":
+                if hash_tag["text"].upper() == "PRERREQUISITOS":
                     resp = BL_Curso.getCursoPrerequisitos(connection, name)
                     if resp != 0:
                         print(st, "[Response]: ", resp["pre_requisito"])
@@ -148,6 +148,6 @@ def updateStatus(user, response):
 myStreamListener = StreamListener()
 myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
 myStream.filter(follow=[config('MY_ID')], async=True)
-# @testmiller33 #Prerequisitos #Curso : Manejo y Exploración de Datos
-# @testmiller33 #Informacion #Curso : Manejo y Exploración de Datos
+# @testmiller33 #Prerrequisitos #Curso Manejo y Exploración de Datos
+# @testmiller33 #Informacion #Curso Manejo y Exploración de Datos
 # @testmiller33  ¿Cómo puedo inscribirme?
