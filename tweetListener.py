@@ -51,13 +51,62 @@ class StreamListener(tweepy.StreamListener):
             print(st, "[User]: ", user)
             for hash_tag in hash_tags:
                 if hash_tag["text"].upper() == "INFORMACION":
-                    resp = BL_Curso.getCursoDescripcion(connection,name)
+                    resp = BL_Curso.getCursoDescripcion(connection, name)
                     print(resp)
                     if resp != 0:
                         print(st, "[Response]: ", resp["descripcion"])
                     else:
-                        print(st, "[DEBUG]: ", "No se ha encontrado ",name)
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
                 if hash_tag["text"].upper() == "PREREQUISITOS":
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
+                if hash_tag["text"].upper == "FECHAS" or hash_tag["text"].upper == "FECHAS":
+                    #             TODO finish
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
+                if hash_tag["text"].upper == "DURACION" or hash_tag["text"].upper == "ESFUERZO":
+                    #             TODO FINISH
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
+                if hash_tag["text"].upper == "LINK" or hash_tag["text"].upper == "INSCRIPCION":
+                    #             TODO FINISH
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
+                if hash_tag["text"].upper == "DOCENTE" or hash_tag["text"].upper == "PROFESOR":
+                    #             TODO FINISH
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
+                if hash_tag["text"].upper == "TEMAS" or hash_tag["text"].upper == "CONTENIDO":
+                    #             TODO FINISH
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
+                if hash_tag["text"].upper == "COMPETENCIAS" or hash_tag["text"].upper == "COMPETENCIA":
+                    #             TODO FINISH
+                    resp = BL_Curso.getCursoPrerequisitos(connection, name)
+                    if resp != 0:
+                        print(st, "[Response]: ", resp["pre_requisito"])
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", name)
+                if hash_tag["text"].upper == "RETOS" or hash_tag["text"].upper == "RETO":
+                    #             TODO FINISH
                     resp = BL_Curso.getCursoPrerequisitos(connection, name)
                     if resp != 0:
                         print(st, "[Response]: ", resp["pre_requisito"])
