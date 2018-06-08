@@ -22,6 +22,16 @@ def getCursoPrerequisitos(connection, data):
         return 0
 
 
+def getFechas(connection, data):
+    new_data = cleanData(data)
+    id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
+    if id_curso != 0:
+        resp = DC_Curso.getFechas(connection, id_curso["id_curso_sin"])
+        return resp
+    else:
+        return 0
+
+
 def cleanData(data):
     words = data.split(" ")
     new_data = ""

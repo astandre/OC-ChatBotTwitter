@@ -20,7 +20,7 @@ def getCursoDescription(cn, id_curso):
     try:
         with cn.cursor() as cursor:
             # Read a single record
-            sql = "SELECT descripcion FROM curso WHERE id_curso = " + str(id_curso)
+            sql = "SELECT descripcion,nombre FROM curso WHERE id_curso = " + str(id_curso)
             if cursor.execute(sql) != 0:
                 result = cursor.fetchone()
                 return result
@@ -34,7 +34,20 @@ def getCursoPreRequisitos(cn, id_curso):
     try:
         with cn.cursor() as cursor:
             # Read a single record
-            sql = "SELECT pre_requisito FROM curso WHERE id_curso = " + str(id_curso)
+            sql = "SELECT pre_requisito,nombre FROM curso WHERE id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchone()
+                return result
+            else:
+                return 0
+    except Exception:
+        print("error", Exception)
+
+def getFechas(cn, id_curso):
+    try:
+        with cn.cursor() as cursor:
+            # Read a single record
+            sql = "SELECT fecha_inscripcion, fecha_inicio,nombre FROM curso WHERE id_curso = " + str(id_curso)
             if cursor.execute(sql) != 0:
                 result = cursor.fetchone()
                 return result
