@@ -9,6 +9,5 @@ def getIdCurso(cn, name):
                 return result
             else:
                 return 0
-
     except Exception:
         print("error", Exception)
