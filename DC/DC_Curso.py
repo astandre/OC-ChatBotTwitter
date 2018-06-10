@@ -69,3 +69,54 @@ def getProfesor(cn, id_curso):
     except Exception:
         print("error", Exception)
 
+def getDuracion(cn, id_curso):
+    try:
+        with cn.cursor() as cursor:
+            # Read a single record
+            sql = "select nombre, esfuerzo_est,duracion from curso where id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchone()
+                return result
+            else:
+                return 0
+    except Exception:
+        print("error", Exception)
+
+def getLink(cn, id_curso):
+    try:
+        with cn.cursor() as cursor:
+            # Read a single record
+            sql = "select nombre, link from curso where id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchone()
+                return result
+            else:
+                return 0
+    except Exception:
+        print("error", Exception)
+
+def getContenido(cn, id_curso):
+    try:
+        with cn.cursor() as cursor:
+            # Read all records
+            sql = "select c.nombre, contenido from contenido inner join curso c on contenido.id_curso_cont = c.id_curso  where id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchall()
+                return result
+            else:
+                return 0
+    except Exception:
+        print("error", Exception)
+
+def getCompetencias(cn, id_curso):
+    try:
+        with cn.cursor() as cursor:
+            # Read all records
+            sql = "select c.nombre, competencia from competencias inner join curso c on competencias.id_curso_comp = c.id_curso  where id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchall()
+                return result
+            else:
+                return 0
+    except Exception:
+        print("error", Exception)

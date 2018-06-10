@@ -38,6 +38,45 @@ def getProfesor(connection, data):
     else:
         return 0
 
+def getDuracion(connection, data):
+    new_data = cleanData(data)
+    id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
+    if id_curso != 0:
+        resp = DC_Curso.getDuracion(connection, id_curso["id_curso_sin"])
+        return resp
+    else:
+        return 0
+
+def getLink(connection, data):
+    new_data = cleanData(data)
+    id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
+    if id_curso != 0:
+        resp = DC_Curso.getLink(connection, id_curso["id_curso_sin"])
+        return resp
+    else:
+        return 0
+
+def getContenido(connection, data):
+    new_data = cleanData(data)
+    id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
+    if id_curso != 0:
+        respuestas = DC_Curso.getContenido(connection, id_curso["id_curso_sin"])
+        for i in range(0,len(respuestas)):
+            respuestas[i]["contenido"] = respuestas[i]["contenido"][0:len(respuestas[i]["contenido"])-1]
+        return respuestas
+    else:
+        return 0
+
+def getCompetencias(connection, data):
+    new_data = cleanData(data)
+    id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
+    if id_curso != 0:
+        respuestas = DC_Curso.getCompetencias(connection, id_curso["id_curso_sin"])
+        for i in range(0,len(respuestas)):
+            respuestas[i]["competencia"] = respuestas[i]["competencia"][0:len(respuestas[i]["competencia"])-1]
+        return respuestas
+    else:
+        return 0
 
 def cleanData(data):
     articles = ["el", "y", "la", "los", "tu","las","de",
