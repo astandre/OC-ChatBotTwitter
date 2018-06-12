@@ -20,7 +20,7 @@ def getCursoDescription(cn, id_curso):
     try:
         with cn.cursor() as cursor:
             # Read a single record
-            sql = "SELECT descripcion,nombre FROM curso WHERE id_curso = " + str(id_curso) +" and archivado = 0"
+            sql = "SELECT descripcion,nombre,link FROM curso WHERE id_curso = " + str(id_curso) +" and archivado = 0"
             if cursor.execute(sql) != 0:
                 result = cursor.fetchone()
                 return result
@@ -120,3 +120,18 @@ def getCompetencias(cn, id_curso):
                 return 0
     except Exception:
         print("error", Exception)
+
+
+def getRetos(cn, id_curso):
+    try:
+        with cn.cursor() as cursor:
+            # Read all records
+            sql = "select c.nombre, reto.descripcion, fecha_entrega from reto inner join curso c on reto.id_curso_reto = c.id_curso  where id_curso = " + str(id_curso)
+            if cursor.execute(sql) != 0:
+                result = cursor.fetchall()
+                return result
+            else:
+                return 0
+    except Exception:
+        print("error", Exception)
+

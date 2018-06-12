@@ -78,6 +78,15 @@ def getCompetencias(connection, data):
     else:
         return 0
 
+def getRetos(connection, data):
+    new_data = cleanData(data)
+    id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
+    if id_curso != 0:
+        retos = DC_Curso.getRetos(connection, id_curso["id_curso_sin"])
+        return retos
+    else:
+        return 0
+
 def cleanData(data):
     articles = ["el", "y", "la", "los", "tu","las","de",
                 "EL","Y","LA","LOS","TU","LAS","DE"]

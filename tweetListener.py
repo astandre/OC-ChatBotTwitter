@@ -35,6 +35,8 @@ class StreamListener(tweepy.StreamListener):
         print(status.text)
 
     def on_data(self, data):
+        curso_no_encontrado = "No he podido encontrar el curso, recuerda escribir bien el nombre del curso"
+        pregunta_no_encontrada = "No he podido encontrar respuesta a tu pregunta, puedes revisar las preguntas frecuentes para más informacion http://opencampus.utpl.edu.ec/faq"
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print("\n", st, "[DEBUG] (Raw-Tweet): ", data)
@@ -42,7 +44,7 @@ class StreamListener(tweepy.StreamListener):
         user = tweet["user"]["screen_name"]
         if BL_Tweet.insertTweet(connection, tweet["user"]["name"], tweet["created_at"], tweet["user"]["screen_name"],
                                 tweet["text"], tweet["source"], str(tweet["user"]["location"]), data) != 0:
-            # TODO insertar mas datos del tweet
+            # TODO test location
             print(st, "[DEBUG]: Tweet guardado en la Base de datos!")
         else:
             print(st, "[DEBUG]: No se ha podido guardar el tweet")
@@ -59,11 +61,13 @@ class StreamListener(tweepy.StreamListener):
                 if hash_tag["text"].upper() == "INFORMACION":
                     resp = BL_Curso.getCursoDescripcion(connection, tweet["text"])
                     if resp != 0:
-                        full_response = "El curso " + resp["nombre"] + " trata: " + resp["descripcion"]
-                        print(st, "[Response]: ", full_response)
+                        size = 280 - (len(user) + len(resp["nombre"]) + len(resp["link"]) + 20)
+                        full_response = "Informacíon " + resp["nombre"] + ": " + resp["descripcion"][0:size] + "... " + \
+                                        resp["link"]
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
                 if hash_tag["text"].upper() == "PRERREQUISITOS":
                     resp = BL_Curso.getCursoPrerequisitos(connection, tweet["text"])
                     if resp != 0:
@@ -72,6 +76,7 @@ class StreamListener(tweepy.StreamListener):
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
                 if hash_tag["text"].upper() == "FECHA" or hash_tag["text"].upper() == "FECHAS":
                     resp = BL_Curso.getFechas(connection, tweet["text"])
                     if resp != 0:
@@ -82,6 +87,7 @@ class StreamListener(tweepy.StreamListener):
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
                 if hash_tag["text"].upper() == "DURACION" or hash_tag["text"].upper() == "ESFUERZO" or hash_tag[
                     "text"].upper() == "TIEMPO":
                     resp = BL_Curso.getDuracion(connection, tweet["text"])
@@ -92,6 +98,7 @@ class StreamListener(tweepy.StreamListener):
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
                 if hash_tag["text"].upper() == "MATRICULA" or hash_tag["text"].upper() == "INSCRIPCION":
                     resp = BL_Curso.getLink(connection, tweet["text"])
                     if resp != 0:
@@ -100,8 +107,8 @@ class StreamListener(tweepy.StreamListener):
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
                 if hash_tag["text"].upper() == "DOCENTE" or hash_tag["text"].upper() == "PROFESOR":
-                    #             TODO revisar si con la cuenta de twiter o solo correo
                     docentes = BL_Curso.getProfesor(connection, tweet["text"])
                     if docentes != 0:
                         if len(docentes) >= 2:
@@ -111,13 +118,14 @@ class StreamListener(tweepy.StreamListener):
                         else:
                             if len(docentes[0]["twitter"]) > 0:
                                 full_response = "El docente encargado es " + docentes[0]["nombre"] + " (" + docentes[0][
-                                    "email"] + ") "  # + docentes[0]["twitter"]
+                                    "email"] + ") " + docentes[0]["twitter"]
                             else:
                                 full_response = "El docente encargado es " + docentes[0]["nombre"] + " (" + docentes[0][
                                     "email"] + ")"
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
                 if hash_tag["text"].upper() == "TEMAS" or hash_tag["text"].upper() == "CONTENIDO" or hash_tag[
                     "text"].upper() == "TEMA":
                     contenidos = BL_Curso.getContenido(connection, tweet["text"])
@@ -131,8 +139,8 @@ class StreamListener(tweepy.StreamListener):
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
                 if hash_tag["text"].upper() == "COMPETENCIAS" or hash_tag["text"].upper() == "COMPETENCIA":
-                    #             TODO FINISH
                     competencias = BL_Curso.getCompetencias(connection, tweet["text"])
                     if competencias != 0:
                         full_response = "Las competencias a obtener del curso " + competencias[0]["nombre"] + " son "
@@ -144,24 +152,36 @@ class StreamListener(tweepy.StreamListener):
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
-                # if hash_tag["text"].upper == "RETOS" or hash_tag["text"].upper == "RETO":
-                #     #             TODO consultar data de retos
-                #     resp = BL_Curso.getCursoPrerequisitos(connection, tweet["text"])
-                #     if resp != 0:
-                #         print(st, "[Response]: ", resp["pre_requisito"])
-                #     else:
-                #         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                        updateStatus(user, curso_no_encontrado)
+                if hash_tag["text"].upper() == "RETOS" or hash_tag["text"].upper() == "RETO":
+                    #             TODO consultar data de retos
+                    resp = BL_Curso.getRetos(connection, tweet["text"])
+                    if resp != 0:
+                        if len(resp) >= 2:
+                            full_response = "Los retos de " + resp[0]["nombre"] + " son "
+                        else:
+                            full_response = "El reto de " + resp[0]["nombre"] + " es "
+                        for i in range(0, len(resp)):
+                            if i + 1 == len(resp):
+                                full_response = full_response + resp[i]["descripcion"] + " (" + resp[i][
+                                    "fecha_entrega"].strftime("%d-%m-%Y") + ")"
+                            else:
+                                full_response = full_response + resp[i]["descripcion"] + " (" + resp[i][
+                                    "fecha_entrega"].strftime("%d-%m-%Y") + ") , "
+                        updateStatus(user, full_response)
+                    else:
+                        print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
         else:
             print(st, "[User]: ", user)
             print(st, "[Question]: ", tweet["text"])
             resp = BL_FAQ.getRespuesta(connection, tweet["text"])
             if resp != 0:
-                size = 280 - (len(user) + len(resp["link"]) + 9)
+                size = 280 - (len(user) + len(resp["link"]) + 16)
                 full_response = resp["respuesta"][0:size] + "... " + resp["link"]
                 updateStatus(user, full_response)
             else:
-                # TODO consultar respuesa oficial al no encontrar preguntas
                 print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                updateStatus(user, pregunta_no_encontrada)
 
         return True
 
@@ -179,7 +199,6 @@ def updateStatus(user, response):
     ts = time.time()
     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
     full_response = ""  # ""@" + user + " " + response
-    # TODO consultar si se agrega el #bot
     size = len(response) + len(user)
     if size >= 280:
         print(st, "[DEBUG]: El tweet supera el maximo de caracteres, dividinedo respuesta!")
@@ -197,6 +216,7 @@ def updateStatus(user, response):
             inicio = fin
             fin = fin + plus
             try:
+                full_response = full_response + " #BOT "
                 if api.update_status(full_response):
                     print(st, "[Response]: (", str(len(full_response)), ") ", full_response)
             except tweepy.error.TweepError as e:
@@ -204,6 +224,7 @@ def updateStatus(user, response):
     else:
         full_response = "@" + user + " " + response
         try:
+            full_response = full_response + " #BOT"
             if api.update_status(full_response):
                 print(st, "[Response]: (", str(len(full_response)), ") ", full_response)
         except tweepy.error.TweepError as e:
@@ -216,10 +237,12 @@ myStreamListener = StreamListener()
 myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
 myStream.filter(follow=[config('MY_ID')], async=True)
 # @testmiller33 #Prerrequisitos #Curso Manejo y Exploración de Datos
+# @testmiller33 #RETOS #Curso Manejo y Exploración de Datos
 # @testmiller33 #Informacion #Curso Manejo y Exploración de Datos
 # @testmiller33 #Profesor #curso Emprendimiento y generación de ideas
 # @testmiller33 #Temas #curso Emprendimiento y generación de ideas
 # @testmiller33 #COMPETENCIAS #curso Emprendimiento y generación de ideas
+# @testmiller33 #RETO #curso Emprendimiento y generación de ideas
 # @testmiller33 #MATRICULA #curso Emprendimiento y generación de ideas
 # @testmiller33 #DURACION #curso Emprendimiento y generación de ideas
 # @testmiller33 ¿Cómo puedo inscribirme?
