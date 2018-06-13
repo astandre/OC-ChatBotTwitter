@@ -5,6 +5,7 @@ import tweepy
 import json, time, datetime
 from BL import BL_Curso, BL_FAQ, BL_Tweet
 import math
+import os
 
 # Twitter authentication
 auth = tweepy.OAuthHandler(config('API_KEY'), config('API_SECRET'))
@@ -12,7 +13,7 @@ auth.set_access_token(config('ACCES_TOKEN'), config('ACCES_TOKEN_SECRET'))
 
 api = tweepy.API(auth)
 # Connect to the database
-connection = pymysql.connect(host='localhost',
+connection = pymysql.connect(host=config('HOST'),
                              user=config('USER'),
                              password=config('DB_PASS'),
                              db=config('DB_NAME'),
@@ -23,8 +24,6 @@ file_open = open("welcome.txt", "r")
 for line in file_open:
     print(line, end="")
 file_open.close()
-print("\nListening for Tweets @opencampus_go ....")
-
 
 class StreamListener(tweepy.StreamListener):
     """
@@ -37,6 +36,7 @@ class StreamListener(tweepy.StreamListener):
     def on_data(self, data):
         curso_no_encontrado = "No he podido encontrar el curso, recuerda escribir bien el nombre del curso"
         pregunta_no_encontrada = "No he podido encontrar respuesta a tu pregunta, puedes revisar las preguntas frecuentes para más informacion http://opencampus.utpl.edu.ec/faq"
+        comando_no_encontrado = "No he podido encontrar el comando, recuerda escribir correctamente el comando"
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print("\n", st, "[DEBUG] (Raw-Tweet): ", data)
@@ -58,7 +58,7 @@ class StreamListener(tweepy.StreamListener):
         if flag == 0:
             print(st, "[User]: ", user)
             for hash_tag in hash_tags:
-                if hash_tag["text"].upper() == "INFORMACION":
+                if hash_tag["text"].upper() == "INFORMACION" or hash_tag["text"].upper() == "INFO":
                     resp = BL_Curso.getCursoDescripcion(connection, tweet["text"])
                     if resp != 0:
                         size = 280 - (len(user) + len(resp["nombre"]) + len(resp["link"]) + 20)
@@ -68,7 +68,7 @@ class StreamListener(tweepy.StreamListener):
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
                         updateStatus(user, curso_no_encontrado)
-                if hash_tag["text"].upper() == "PRERREQUISITOS":
+                if hash_tag["text"].upper() == "PRERREQUISITOS" or hash_tag["text"].upper() == "PREREQUISITOS":
                     resp = BL_Curso.getCursoPrerequisitos(connection, tweet["text"])
                     if resp != 0:
                         full_response = "Los prerrequisitos para el curso " + resp["nombre"] + " son: " + resp[
@@ -126,7 +126,7 @@ class StreamListener(tweepy.StreamListener):
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
                         updateStatus(user, curso_no_encontrado)
-                if hash_tag["text"].upper() == "TEMAS" or hash_tag["text"].upper() == "CONTENIDO" or hash_tag[
+                if hash_tag["text"].upper() == "TEMAS" or hash_tag["text"].upper() == "CONTENIDOS" or hash_tag[
                     "text"].upper() == "TEMA":
                     contenidos = BL_Curso.getContenido(connection, tweet["text"])
                     if contenidos != 0:
@@ -171,6 +171,9 @@ class StreamListener(tweepy.StreamListener):
                         updateStatus(user, full_response)
                     else:
                         print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                else:
+                    print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                    updateStatus(comando_no_encontrado)
         else:
             print(st, "[User]: ", user)
             print(st, "[Question]: ", tweet["text"])
@@ -180,6 +183,7 @@ class StreamListener(tweepy.StreamListener):
                 full_response = resp["respuesta"][0:size] + "... " + resp["link"]
                 updateStatus(user, full_response)
             else:
+                # TODO optimizar mensaje al no encontrar informacion
                 print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
                 updateStatus(user, pregunta_no_encontrada)
 
@@ -229,13 +233,20 @@ def updateStatus(user, response):
                 print(st, "[Response]: (", str(len(full_response)), ") ", full_response)
         except tweepy.error.TweepError as e:
             print(st, "[DEBUG]: El post ya existe ...  ")
+            # TODO revisar si se puede borrar tweet para reenviarlo
             # response = response + " ..."
             # updateStatus(user, response)
 
 
 myStreamListener = StreamListener()
 myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
-myStream.filter(follow=[config('MY_ID')], async=True)
+if config('DEBUG', default=False, cast=bool):
+    print("\nListening for Tweets @testmiller33 ....")
+    myStream.filter(follow=[config('MY_ID')], async=True)
+else:
+    print("\nListening for Tweets @opencampus_go ....")
+    myStream.filter(follow=[config('OC_ID')], async=True)
+
 # @testmiller33 #Prerrequisitos #Curso Manejo y Exploración de Datos
 # @testmiller33 #RETOS #Curso Manejo y Exploración de Datos
 # @testmiller33 #Informacion #Curso Manejo y Exploración de Datos
