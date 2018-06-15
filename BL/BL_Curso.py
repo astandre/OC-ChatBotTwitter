@@ -62,7 +62,7 @@ def getContenido(connection, data):
     if id_curso != 0:
         respuestas = DC_Curso.getContenido(connection, id_curso["id_curso_sin"])
         for i in range(0,len(respuestas)):
-            if respuestas[i]["competencia"][0] == ".":
+            if respuestas[i]["contenido"][0] == ".":
                 respuestas[i]["contenido"] = respuestas[i]["contenido"][0:len(respuestas[i]["contenido"])-1]
         return respuestas
     else:
