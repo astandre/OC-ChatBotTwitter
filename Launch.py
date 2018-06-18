@@ -179,14 +179,17 @@ class StreamListener(tweepy.StreamListener):
 
         else:
             print(st, "[Question]: ", tweet["text"])
-            resp = BL_FAQ.getRespuesta(connection, tweet["text"])
-            if resp != 0:
-                size = 280 - (len(user) + len(resp["link"]) + 16)
-                full_response = resp["respuesta"][0:size] + "... " + resp["link"]
-                updateStatus(user, user_id, full_response)
+            if tweet["text"][1:len(tweet["text"])] == "opencampus_go":
+                updateStatusMedia("ComandosChatBot.jpg", user, user_id, respuesta_ayuda)
             else:
-                print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
-                updateStatus(user, user_id, pregunta_no_encontrada)
+                resp = BL_FAQ.getRespuesta(connection, tweet["text"])
+                if resp != 0:
+                    size = 280 - (len(user) + len(resp["link"]) + 16)
+                    full_response = resp["respuesta"][0:size] + "... " + resp["link"]
+                    updateStatus(user, user_id, full_response)
+                else:
+                    print(st, "[DEBUG]: ", "No se ha encontrado ", tweet["text"])
+                    updateStatus(user, user_id, pregunta_no_encontrada)
 
         return True
 
@@ -219,7 +222,7 @@ def updateStatus(user, user_id, response):
             if x + 1 != size_parts:
                 full_response = full_response + " ..."
             inicio = fin
-            fin = fin + plus+1
+            fin = fin + plus
             try:
                 full_response = full_response + " #BOT "
                 if api.update_status(full_response, user_id):
@@ -248,7 +251,7 @@ def updateStatusMedia(file, user, user_id, response):
 
 
 myStreamListener = StreamListener()
-myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener)
+myStream = tweepy.Stream(auth=api.auth, listener=myStreamListener,async=True)
 if config('DEBUG', default=False, cast=bool):
     print("\nListening for Tweets @testmiller33 ....")
     myStream.filter(follow=[config('MY_ID')], async=True)
