@@ -1,9 +1,11 @@
-from DC import DC_FAQ
+from DC import DC_FAQ, DC_Tweets
 import unicodedata
 
 def getRespuesta(connection, data):
     resp = DC_FAQ.getRespuesta(connection, cleanData(data))
     if resp != 0:
+        tweet_id = DC_Tweets.getLastTweetId(cn)
+        DC_Tweets.updateTweetResp(cn, tweet_id['id_tweet'])
         return resp
     else:
         return 0

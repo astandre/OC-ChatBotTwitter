@@ -1,19 +1,3 @@
-from MODEL import Curso
-
-
-def getAllCursos(cn):
-    cursos_list = []
-    try:
-        with cn.cursor() as cursor:
-            # Read a single record
-            sql = "SELECT * FROM curso "
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            for res in result:
-                curso = Curso.Curso(res["id_curso"], res["nombre"], res["descripcion"])
-                cursos_list.append(curso)
-    except Exception:
-        print("error", Exception)
 
 
 def getCursoDescription(cn, id_curso):
