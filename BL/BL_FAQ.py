@@ -1,23 +1,26 @@
 from DC import DC_FAQ, DC_Tweets
 import unicodedata
 
+
 def getRespuesta(connection, data):
     resp = DC_FAQ.getRespuesta(connection, cleanData(data))
     if resp != 0:
-        tweet_id = DC_Tweets.getLastTweetId(cn)
-        DC_Tweets.updateTweetResp(cn, tweet_id['id_tweet'])
+        tweet_id = DC_Tweets.getLastTweetId(connection)
+        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
         return resp
     else:
         return 0
 
+
 def cleanData(data):
-    special = ["¿", "?", "!","¡","(",")",",",".",";",":","-","-","{","}","[","]","+","-","/","*","<",">"]
+    special = ["¿", "?", "!", "¡", "(", ")", ",", ".", ";", ":", "-", "-", "{", "}", "[", "]", "+", "-", "/", "*", "<",
+               ">"]
     data_aux = ""
-    for i in range(0, len(data) ):
+    for i in range(0, len(data)):
         if data[i] not in special:
-            if i + 1 <= len(data) -1:
+            if i + 1 <= len(data) - 1:
                 if data[i] == " ":
-                    if data[i+1] != " ":
+                    if data[i + 1] != " ":
                         data_aux = data_aux + data[i]
                 else:
                     data_aux = data_aux + data[i]
@@ -32,6 +35,7 @@ def cleanData(data):
         new_data = new_data[0:len(new_data) - 1]
     return strip_accents(new_data)
 
+
 def strip_accents(s):
-   return ''.join(c for c in unicodedata.normalize('NFD', s)
-                  if unicodedata.category(c) != 'Mn')
+    return ''.join(c for c in unicodedata.normalize('NFD', s)
+                   if unicodedata.category(c) != 'Mn')
