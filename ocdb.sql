@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-06-2018 a las 05:12:21
+-- Tiempo de generación: 18-06-2018 a las 18:49:13
 -- Versión del servidor: 10.1.32-MariaDB
 -- Versión de PHP: 7.2.5
 
@@ -129,7 +129,9 @@ INSERT INTO `competencias` (`id_comp`, `id_curso_comp`, `competencia`) VALUES
 (88, 22, 'Capacidad para analizar, e interpretar resultados par una adecuada toma de decisiones.'),
 (89, 23, 'Identificar y comprender, desde el humanismo de Cristo, los principales problemas antropológicos que afectan el desarrollo de la existencia humana y de que la propuesta de Cristo al entendimiento y vivencia de estos problemas, le aporta al hombre su máxima dignidad: el hombre ha sido creado a imagen'),
 (90, 23, 'Entender, desde el humanismo de Cristo, que la verdad revelada orienta la formación de la persona humana en sus diversos ámbitos, tales como el familiar, el educativo, el académico y el social.'),
-(91, 23, 'Comprender el modelo genético presentado por Fernando Rielo y ser capaz de percibir la novedad que representa.');
+(91, 23, 'Comprender el modelo genético presentado por Fernando Rielo y ser capaz de percibir la novedad que representa.'),
+(92, 24, 'Describir conjuntos de datos.'),
+(93, 24, 'Realizar inferencias sobre conjuntos de datos.');
 
 -- --------------------------------------------------------
 
@@ -618,7 +620,8 @@ INSERT INTO `preguntas` (`id_pregunta`, `id_preg_intent`, `pregunta`) VALUES
 (100, 44, 'Cómo me puedes ayudar?'),
 (101, 44, 'Como me puedes ayudar?'),
 (102, 45, '¿Cuantos cursos hay?'),
-(103, 45, '¿Que cursos hay?');
+(103, 45, '¿Que cursos hay?'),
+(104, 44, '¿Como funciona el chatbot?');
 
 -- --------------------------------------------------------
 
@@ -917,7 +920,7 @@ ALTER TABLE `tweets`
 -- AUTO_INCREMENT de la tabla `competencias`
 --
 ALTER TABLE `competencias`
-  MODIFY `id_comp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id_comp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT de la tabla `contenido`
@@ -947,7 +950,7 @@ ALTER TABLE `intents`
 -- AUTO_INCREMENT de la tabla `preguntas`
 --
 ALTER TABLE `preguntas`
-  MODIFY `id_pregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id_pregunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT de la tabla `respuesta`
@@ -971,7 +974,7 @@ ALTER TABLE `sinonimos`
 -- AUTO_INCREMENT de la tabla `tweets`
 --
 ALTER TABLE `tweets`
-  MODIFY `id_tweet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+  MODIFY `id_tweet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- Restricciones para tablas volcadas
