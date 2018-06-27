@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-06-2018 a las 18:49:13
+-- Tiempo de generación: 27-06-2018 a las 07:04:50
 -- Versión del servidor: 10.1.32-MariaDB
 -- Versión de PHP: 7.2.5
 
@@ -441,6 +441,25 @@ INSERT INTO `docente_curso` (`id_curso`, `id_docente_curso`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `inputs`
+--
+
+CREATE TABLE `inputs` (
+  `id_input` int(11) NOT NULL,
+  `nombre` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `usuario` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `texto` varchar(280) COLLATE utf8_unicode_ci NOT NULL,
+  `source` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `location` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `raw_input` varchar(2500) COLLATE utf8_unicode_ci NOT NULL,
+  `tipo` varchar(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `respuesta` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `intents`
 --
 
@@ -815,25 +834,8 @@ INSERT INTO `sinonimos` (`id_sin`, `id_curso_sin`, `sinonimo`) VALUES
 (98, 23, 'ANTROPOLOGIA'),
 (99, 23, 'ANTRPY'),
 (100, 24, 'CIENCIA DATOS'),
-(101, 24, 'DCSFS');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tweets`
---
-
-CREATE TABLE `tweets` (
-  `id_tweet` int(11) NOT NULL,
-  `nombre` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `usuario` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `texto` varchar(280) COLLATE utf8_unicode_ci NOT NULL,
-  `source` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `location` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `raw_tweet` varchar(2500) COLLATE utf8_unicode_ci NOT NULL,
-  `respuesta` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+(101, 24, 'DCSFS'),
+(102, 2, 'SALUD SEXUAL REPRODUCTIVA');
 
 --
 -- Índices para tablas volcadas
@@ -873,6 +875,12 @@ ALTER TABLE `docente_curso`
   ADD KEY `docente_curso_ibfk_2` (`id_curso`);
 
 --
+-- Indices de la tabla `inputs`
+--
+ALTER TABLE `inputs`
+  ADD PRIMARY KEY (`id_input`);
+
+--
 -- Indices de la tabla `intents`
 --
 ALTER TABLE `intents`
@@ -907,12 +915,6 @@ ALTER TABLE `sinonimos`
   ADD KEY `fk_sinonimo_curso` (`id_curso_sin`);
 
 --
--- Indices de la tabla `tweets`
---
-ALTER TABLE `tweets`
-  ADD PRIMARY KEY (`id_tweet`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -939,6 +941,12 @@ ALTER TABLE `curso`
 --
 ALTER TABLE `docente`
   MODIFY `id_docente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT de la tabla `inputs`
+--
+ALTER TABLE `inputs`
+  MODIFY `id_input` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT de la tabla `intents`
@@ -968,13 +976,7 @@ ALTER TABLE `reto`
 -- AUTO_INCREMENT de la tabla `sinonimos`
 --
 ALTER TABLE `sinonimos`
-  MODIFY `id_sin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
-
---
--- AUTO_INCREMENT de la tabla `tweets`
---
-ALTER TABLE `tweets`
-  MODIFY `id_tweet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `id_sin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- Restricciones para tablas volcadas

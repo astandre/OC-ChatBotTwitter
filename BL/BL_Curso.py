@@ -1,4 +1,4 @@
-from DC import DC_Sinonimo, DC_Curso, DC_Tweets
+from DC import DC_Sinonimo, DC_Curso, DC_Inputs
 import unicodedata
 
 
@@ -7,8 +7,8 @@ def getCursoDescripcion(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         resp = DC_Curso.getCursoDescription(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         return resp
     else:
         return 0
@@ -19,8 +19,8 @@ def getCursoPrerequisitos(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         resp = DC_Curso.getCursoPreRequisitos(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         return resp
     else:
         return 0
@@ -31,8 +31,8 @@ def getFechas(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         resp = DC_Curso.getFechas(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         return resp
     else:
         return 0
@@ -43,8 +43,8 @@ def getProfesor(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         resp = DC_Curso.getProfesor(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         return resp
     else:
         return 0
@@ -55,8 +55,8 @@ def getDuracion(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         resp = DC_Curso.getDuracion(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         return resp
     else:
         return 0
@@ -67,8 +67,8 @@ def getLink(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         resp = DC_Curso.getLink(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         return resp
     else:
         return 0
@@ -79,8 +79,8 @@ def getContenido(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         respuestas = DC_Curso.getContenido(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         if respuestas != 0:
             for i in range(0, len(respuestas)):
                 if respuestas[i]["contenido"][len(respuestas[i]["contenido"])-1] == ".":
@@ -98,8 +98,8 @@ def getCompetencias(connection, data):
     if id_curso != 0:
         respuestas = DC_Curso.getCompetencias(connection, id_curso["id_curso_sin"])
         if respuestas != 0:
-            tweet_id = DC_Tweets.getLastTweetId(connection)
-            DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+            tweet_id = DC_Inputs.getLastTweetId(connection)
+            DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
             for i in range(0, len(respuestas)):
                 if respuestas[i]["competencia"][len(respuestas[i]["competencia"])-1] == ".":
                     respuestas[i]["competencia"] = respuestas[i]["competencia"][0:len(respuestas[i]["competencia"]) - 1]
@@ -115,8 +115,8 @@ def getRetos(connection, data):
     id_curso = DC_Sinonimo.getIdCurso(connection, new_data.upper())
     if id_curso != 0:
         retos = DC_Curso.getRetos(connection, id_curso["id_curso_sin"])
-        tweet_id = DC_Tweets.getLastTweetId(connection)
-        DC_Tweets.updateTweetResp(connection, tweet_id['id_tweet'])
+        tweet_id = DC_Inputs.getLastTweetId(connection)
+        DC_Inputs.updateTweetResp(connection, tweet_id['id_input'])
         return retos
     else:
         return 0

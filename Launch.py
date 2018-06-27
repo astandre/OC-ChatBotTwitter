@@ -2,7 +2,7 @@ from decouple import config
 import pymysql.cursors
 import tweepy
 import json, time, datetime
-from BL import BL_Curso, BL_FAQ, BL_Tweet
+from BL import BL_Curso, BL_FAQ, BL_Inputs
 import math
 
 # Twitter authentication
@@ -41,8 +41,8 @@ class StreamListener(tweepy.StreamListener):
         print(st, "[DEBUG] (Raw-Tweet): ", data)
         tweet = json.loads(data)
         user = tweet["user"]["screen_name"]
-        if BL_Tweet.insertTweet(connection, tweet["user"]["name"], tweet["created_at"], tweet["user"]["screen_name"],
-                                tweet["text"], tweet["source"], str(tweet["user"]["location"]), data) != 0:
+        if BL_Inputs.insertTweet(connection, tweet["user"]["name"], tweet["created_at"], tweet["user"]["screen_name"],
+                                 tweet["text"], tweet["source"], str(tweet["user"]["location"]), data) != 0:
             print(st, "[DEBUG]: Tweet guardado en la Base de datos!")
         else:
             print(st, "[DEBUG]: No se ha podido guardar el tweet")

@@ -9,7 +9,7 @@ def insertTweet(cn, name, created_at, usuario, text, source, location, tweet):
     try:
         with cn.cursor() as cursor:
             # Read a single record
-            sql = "INSERT INTO `tweets`( `nombre`, `created_at`, `usuario`, `texto`, `source`, `location`, `raw_tweet`) VALUES ('" + name + "','" + created_at + "','" + usuario + "','" + text + "','" + source + "','" + location + "','" + tweet + "')"
+            sql = "INSERT INTO `inputs`( `nombre`, `created_at`, `usuario`, `texto`, `source`, `location`, `raw_input`) VALUES ('" + name + "','" + created_at + "','" + usuario + "','" + text + "','" + source + "','" + location + "','" + tweet + "')"
             cursor.execute(sql)
             cn.commit()
     except:
@@ -18,7 +18,7 @@ def insertTweet(cn, name, created_at, usuario, text, source, location, tweet):
 def getLastTweetId(cn):
     try:
         with cn.cursor() as cursor:
-            sql = "SELECT id_tweet FROM tweets ORDER BY id_tweet DESC LIMIT 1"
+            sql = "SELECT id_input FROM inputs ORDER BY id_input DESC LIMIT 1"
             if cursor.execute(sql) != 0:
                 result = cursor.fetchone()
                 return result
@@ -32,7 +32,7 @@ def updateTweetResp(cn,id_tweet):
     try:
         with cn.cursor() as cursor:
             # Read a single record
-            sql = " UPDATE `tweets`  SET `respuesta` = 1  WHERE  id_tweet =" + str(id_tweet)
+            sql = " UPDATE `inputs`  SET `respuesta` = 1  WHERE  id_input =" + str(id_tweet)
             cursor.execute(sql)
             cn.commit()
     except:
