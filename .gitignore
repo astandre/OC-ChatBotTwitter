@@ -5,3 +5,4 @@ BL/*.*
 DC/*.*
 MODEL/*.*
 ocdb.sql
+.env
