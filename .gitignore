@@ -1,0 +1,7 @@
+*.pyc
+venv
+.idea
+BL/*.*
+DC/*.*
+MODEL/*.*
+ocdb.sql
